@@ -14,25 +14,25 @@ class HTMLNode:
         else:
             return ""
     
-    def to_html(self):
-        if self.tag == None:
-            return self.value
-        else:
-            open_tag = f"<{self.tag}{self.props_to_html()}>" 
-            close_tag = f"</{self.tag}>"
-            return f"{open_tag}{self.value}{close_tag}"
-
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, children: {self.children}, {self.props})"
 
 class LeafNode(HTMLNode):
     def __init__(self, tag, value, props=None):
-        if value == None:
-            raise ValueError
-        else:
-            super().__init__(tag, value, props=props)
+        super().__init__(tag, value, None, props)
 
-test_node = LeafNode("p", "This is a paragraph of text.", {"class": "test", "href": "hello"}) #the props are not rendering
-test_node2 = HTMLNode("p", "This is a paragraph of text.", {"class": "test", "href": "hello"}) #the props are not rendering
-print(test_node.to_html())
-print(test_node2.to_html())
+    def to_html(self):
+        if self.tag == None:
+            return self.value
+        if self.value == None:
+            raise ValueError("Value cannot be blank")
+        return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+
+tester = LeafNode("p", "this is a hello world test", {"class": "hello", "id": "world"})
+print(tester.to_html())
+
+tester2 = LeafNode("p", "this is a hello world test")
+print(tester2.to_html())
+
+tester3 = LeafNode(None, "this is a hello world test")
+print(tester3.to_html())
