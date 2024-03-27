@@ -28,11 +28,18 @@ class LeafNode(HTMLNode):
             raise ValueError("Value cannot be blank")
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
 
-tester = LeafNode("p", "this is a hello world test", {"class": "hello", "id": "world"})
-print(tester.to_html())
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
 
-tester2 = LeafNode("p", "this is a hello world test")
-print(tester2.to_html())
+    def to_html(self):
+        if self.tag == None:
+            raise ValueError("A tag must be provided")
+        if self.children == None:
+            raise ValueError("No child elements provided")
+        result = ''
+        for child in self.children:
+            result += child.to_html()
+        
+        return f'<{self.tag}{self.props_to_html()}>{result}</{self.tag}>'
 
-tester3 = LeafNode(None, "this is a hello world test")
-print(tester3.to_html())
