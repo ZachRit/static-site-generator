@@ -1,5 +1,6 @@
 from textnode import TextNode
 from textnode import text_type_text, text_type_bold, text_type_italic, text_type_code
+import re
 
 #this function will only support a single level of nesting (one delimiter type)
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -19,3 +20,11 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             else:
                 raise ValueError("Invalid markdown. Missing closing delimiter")
     return nodes
+
+def extract_markdown_images(text):
+    matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+    return matches
+
+def extract_markdown_links(text):
+    matches = re.findall(r"\[(.*?)\]\((.*?)\)", text)
+    return matches
