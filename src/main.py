@@ -1,7 +1,15 @@
-from textnode import TextNode
+import os, shutil
+from copystatic import copy_directory
+from generate_page import generate_page_recursive
 
 def main():
-    new_node = TextNode('This is a text node', 'bold', 'https://www.boot.dev')
-    print(new_node)
+    del_public_directory()
+    copy_directory("./static", "./public")
+    print("Copied files to public directory...")
+    generate_page_recursive("./content", "./template.html", "./public")
+
+def del_public_directory():
+    if os.path.exists("./public"):
+        shutil.rmtree("./public")
 
 main()
